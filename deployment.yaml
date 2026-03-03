@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeting-app
+  labels:
+    app: greeting-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: greeting-app
+  template:
+    metadata:
+      labels:
+        app: greeting-app
+    spec:
+      containers:
+      - name: greeting-app
+        image: greeting-app:latest   # change to your Docker Hub image if needed
+        imagePullPolicy: Never       # use "Always" if using Docker Hub
+        ports:
+        - containerPort: 8000
+
+        # Liveness Probe (checks if app is alive)
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+            
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        # Readiness Probe (checks if app is ready to receive traffic)
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 5
