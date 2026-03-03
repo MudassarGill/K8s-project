@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greeting App</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 400px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #2e59d9;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            border-color: #4e73df;
+        }
+
+        button {
+            padding: 10px 25px;
+            background: #4e73df;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2e59d9;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1> Greeting App</h1>
+        <p>Enter your name and get a personalized greeting</p>
+
+        <input type="text" id="nameInput" placeholder="Enter your name...">
+        <button onclick="sendGreeting()">Submit</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function sendGreeting() {
+            const name = document.getElementById('nameInput').value;
+
+            if (!name) {
+                document.getElementById('result').innerHTML = "❗ Please enter a name!";
+                return;
+            }
+
+            // Hit your FastAPI endpoint
+            const response = await fetch(`/greet/${name}`);
+            const data = await response.json();
+
+            document.getElementById('result').innerHTML = `<h2>${data.greeting}</h2>`;
+        }
+    </script>
+
+</body>
+</html>
