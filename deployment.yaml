@@ -16,30 +16,23 @@ spec:
     spec:
       containers:
         - name: greeting-app
-          image: greeting-app:latest # change to your Docker Hub image if needed
-          imagePullPolicy: Never # use "Always" if using Docker Hub
+          image: greeting-app:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8000
-
-          # Resource requests and limits (prevents noisy neighbor issues)
           resources:
             requests:
-              cpu: "100m" # 0.1 CPU core guaranteed
-              memory: "128Mi" # 128 MiB guaranteed
+              cpu: "100m"
+              memory: "128Mi"
             limits:
-              cpu: "500m" # 0.5 CPU core maximum
-              memory: "256Mi" # 256 MiB maximum
-
-          # Liveness Probe (checks if app is alive)
+              cpu: "500m"
+              memory: "256Mi"
           livenessProbe:
             httpGet:
               path: /
               port: 8000
-
             initialDelaySeconds: 5
             periodSeconds: 10
-
-          # Readiness Probe (checks if app is ready to receive traffic)
           readinessProbe:
             httpGet:
               path: /
@@ -47,11 +40,16 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 5
 
---- 
-Service:
-  template: service_http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: greeting-app-service
+spec:
   selector:
     app: greeting-app
   ports:
-    - port: 80
+    - protocol: TCP
+      port: 80
       targetPort: 8000
+  type: NodePort
