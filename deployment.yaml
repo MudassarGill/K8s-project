@@ -46,3 +46,12 @@ spec:
               port: 8000
             initialDelaySeconds: 3
             periodSeconds: 5
+
+--- 
+Service:
+  template: service_http
+  selector:
+    app: greeting-app
+  ports:
+    - port: 80
+      targetPort: 8000
